@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "generate:copy:backend": "cpy --cwd=build types.ts --rename=types.ts ../../../backend/src/api",
+    "dev": "openapi preview-docs",
+    "build": "openapi bundle -o ./src/openapi.yaml",
+    "generate:types": "openapi-typescript -o ./build/types.ts && npm run  modify-file && eslint --fix --ext .js,.ts ./build/types.ts && npm run generate:copy:backend",
+    "lint": "openapi lint"
+  },
+  "dependencies": {
+    "@redocly/cli": "^1.11.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "cpy-cli": "^5.0.0",
+   "eslint": "^8.57.0",
+   "openapi-typescript": "^6.7.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.0"
+  }
+}

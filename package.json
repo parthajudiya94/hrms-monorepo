@@ -1,0 +1,19 @@
+{
+  "name": "time-tracking-app",
+  "version": "1.0.0",
+  "description": "Time tracking App - Monorepo",
+  "keywords": [],
+  "license": "UNLICENSED",
+  "author": "Parth Ajudiya",
+  "private": true,
+  "scripts": {
+    "install": "lerna bootstrap",
+    "start": "concurrently \"npm run start:web\" \"npm run start:backend\"",
+    "start:web": "cd packages/web && npm start",
+    "start:backend": "cd packages/backend && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "lerna": "^4.0.0"
+  }
+}

@@ -1,0 +1,5 @@
+node_modules
+*.log
+
+packages/web/.env
+packages/backend/.env
