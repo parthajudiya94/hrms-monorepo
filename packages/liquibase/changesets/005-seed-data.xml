@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <!-- Insert default system roles for a sample tenant -->
+  <changeSet id="005-insert-default-roles" author="system">
+    <comment>Insert default system roles. These will be created per tenant when tenant is created.</comment>
+    <sql>
+      -- Note: This is a template. In practice, default roles should be created when a tenant is created
+      -- For now, we'll create a sample tenant with default roles
+      INSERT INTO tenants (name, domain) VALUES ('Sample Company', 'sample.local');
+      
+      SET @tenant_id = LAST_INSERT_ID();
+      
+      INSERT INTO roles (tenant_id, name, description, is_system_role) VALUES
+      (@tenant_id, 'Admin', 'Administrator with full access', true),
+      (@tenant_id, 'CEO', 'Chief Executive Officer', true),
+      (@tenant_id, 'HR', 'Human Resources', true),
+      (@tenant_id, 'CTO', 'Chief Technology Officer', true),
+      (@tenant_id, 'CFO', 'Chief Financial Officer', true),
+      (@tenant_id, 'Project Manager', 'Project Manager', true),
+      (@tenant_id, 'Team Leader', 'Team Leader', true),
+      (@tenant_id, 'Employee', 'Regular Employee', true);
+    </sql>
+  </changeSet>
+
+  <!-- Insert default admin user for login -->
+  <changeSet id="006-insert-default-admin-user" author="system">
+    <comment>Insert default admin user for testing and initial login</comment>
+    <sql>
+      -- Get the admin role ID for the sample tenant
+      SET @admin_role_id = (SELECT id FROM roles WHERE tenant_id = (SELECT id FROM tenants WHERE domain = 'sample.local') AND name = 'Admin' LIMIT 1);
+      SET @tenant_id = (SELECT id FROM tenants WHERE domain = 'sample.local' LIMIT 1);
+      
+      -- Insert default admin user
+      -- Email: admin@sample.local
+      -- Password: admin123
+      -- Password hash: $2a$10$.zso8vSVVFas8popP2sEle6djMTSLnF0mXVCw1G4tLApgfZWC/h0q
+      INSERT INTO users (tenant_id, role_id, email, password_hash, first_name, last_name, is_active)
+      VALUES (
+        @tenant_id,
+        @admin_role_id,
+        'admin@sample.local',
+        '$2a$10$.zso8vSVVFas8popP2sEle6djMTSLnF0mXVCw1G4tLApgfZWC/h0q',
+        'Admin',
+        'User',
+        true
+      );
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>
+

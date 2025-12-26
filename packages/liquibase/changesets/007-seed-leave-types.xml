@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <!-- Insert default leave types for sample tenant -->
+  <changeSet id="007-insert-default-leave-types" author="system">
+    <comment>Insert default leave types for the sample tenant</comment>
+    <sql>
+      SET @tenant_id = (SELECT id FROM tenants WHERE domain = 'sample.local' LIMIT 1);
+      
+      INSERT INTO leave_types (tenant_id, name, description, max_days, is_paid, requires_approval, is_active) VALUES
+      (@tenant_id, 'Annual Leave', 'Annual vacation leave', 20, true, true, true),
+      (@tenant_id, 'Sick Leave', 'Medical leave for illness', 10, true, true, true),
+      (@tenant_id, 'Personal Leave', 'Personal time off', 5, false, true, true),
+      (@tenant_id, 'Emergency Leave', 'Emergency situations', 3, true, false, true),
+      (@tenant_id, 'Maternity Leave', 'Maternity leave', 90, true, true, true),
+      (@tenant_id, 'Paternity Leave', 'Paternity leave', 7, true, true, true),
+      (@tenant_id, 'Bereavement Leave', 'Leave for family death', 5, true, false, true);
+    </sql>
+  </changeSet>
+
+  <!-- Initialize leave balances for admin user -->
+  <changeSet id="008-initialize-leave-balances" author="system">
+    <comment>Initialize leave balances for the admin user</comment>
+    <sql>
+      SET @tenant_id = (SELECT id FROM tenants WHERE domain = 'sample.local' LIMIT 1);
+      SET @user_id = (SELECT id FROM users WHERE email = 'admin@sample.local' LIMIT 1);
+      SET @year = YEAR(CURDATE());
+      
+      INSERT INTO leave_balances (user_id, tenant_id, leave_type_id, year, allocated_days, used_days, pending_days)
+      SELECT @user_id, @tenant_id, id, @year, max_days, 0, 0
+      FROM leave_types
+      WHERE tenant_id = @tenant_id AND is_active = true;
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>
+

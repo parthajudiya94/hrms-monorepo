@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <!-- Create leave_types table -->
+  <changeSet id="006-create-leave-types" author="system">
+    <createTable tableName="leave_types">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="TEXT"/>
+      <column name="max_days" type="INT" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+      <column name="is_paid" type="BOOLEAN" defaultValueBoolean="true">
+        <constraints nullable="false"/>
+      </column>
+      <column name="requires_approval" type="BOOLEAN" defaultValueBoolean="true">
+        <constraints nullable="false"/>
+      </column>
+      <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint
+      baseTableName="leave_types"
+      baseColumnNames="tenant_id"
+      constraintName="fk_leave_types_tenant"
+      referencedTableName="tenants"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <createIndex indexName="idx_leave_types_tenant" tableName="leave_types">
+      <column name="tenant_id"/>
+    </createIndex>
+  </changeSet>
+
+  <!-- Create leave_balances table -->
+  <changeSet id="007-create-leave-balances" author="system">
+    <createTable tableName="leave_balances">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenant_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="leave_type_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="year" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="allocated_days" type="DECIMAL(10,2)" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+      <column name="used_days" type="DECIMAL(10,2)" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+      <column name="pending_days" type="DECIMAL(10,2)" defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint
+      baseTableName="leave_balances"
+      baseColumnNames="user_id"
+      constraintName="fk_leave_balances_user"
+      referencedTableName="users"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <addForeignKeyConstraint
+      baseTableName="leave_balances"
+      baseColumnNames="tenant_id"
+      constraintName="fk_leave_balances_tenant"
+      referencedTableName="tenants"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <addForeignKeyConstraint
+      baseTableName="leave_balances"
+      baseColumnNames="leave_type_id"
+      constraintName="fk_leave_balances_leave_type"
+      referencedTableName="leave_types"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <createIndex indexName="idx_leave_balances_user" tableName="leave_balances">
+      <column name="user_id"/>
+    </createIndex>
+    <createIndex indexName="idx_leave_balances_user_year" tableName="leave_balances">
+      <column name="user_id"/>
+      <column name="year"/>
+    </createIndex>
+  </changeSet>
+
+  <!-- Create leaves table -->
+  <changeSet id="008-create-leaves" author="system">
+    <createTable tableName="leaves">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tenant_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="leave_type_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="start_date" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="end_date" type="DATE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="total_days" type="DECIMAL(10,2)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="reason" type="TEXT"/>
+      <column name="status" type="VARCHAR(50)" defaultValue="pending">
+        <constraints nullable="false"/>
+      </column>
+      <column name="applied_by" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="approved_by" type="INT"/>
+      <column name="rejected_by" type="INT"/>
+      <column name="approved_at" type="TIMESTAMP"/>
+      <column name="rejected_at" type="TIMESTAMP"/>
+      <column name="rejection_reason" type="TEXT"/>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint
+      baseTableName="leaves"
+      baseColumnNames="user_id"
+      constraintName="fk_leaves_user"
+      referencedTableName="users"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <addForeignKeyConstraint
+      baseTableName="leaves"
+      baseColumnNames="tenant_id"
+      constraintName="fk_leaves_tenant"
+      referencedTableName="tenants"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <addForeignKeyConstraint
+      baseTableName="leaves"
+      baseColumnNames="leave_type_id"
+      constraintName="fk_leaves_leave_type"
+      referencedTableName="leave_types"
+      referencedColumnNames="id"
+      onDelete="RESTRICT"/>
+    <addForeignKeyConstraint
+      baseTableName="leaves"
+      baseColumnNames="applied_by"
+      constraintName="fk_leaves_applied_by"
+      referencedTableName="users"
+      referencedColumnNames="id"
+      onDelete="RESTRICT"/>
+    <addForeignKeyConstraint
+      baseTableName="leaves"
+      baseColumnNames="approved_by"
+      constraintName="fk_leaves_approved_by"
+      referencedTableName="users"
+      referencedColumnNames="id"
+      onDelete="SET NULL"/>
+    <addForeignKeyConstraint
+      baseTableName="leaves"
+      baseColumnNames="rejected_by"
+      constraintName="fk_leaves_rejected_by"
+      referencedTableName="users"
+      referencedColumnNames="id"
+      onDelete="SET NULL"/>
+    <createIndex indexName="idx_leaves_user" tableName="leaves">
+      <column name="user_id"/>
+    </createIndex>
+    <createIndex indexName="idx_leaves_status" tableName="leaves">
+      <column name="status"/>
+    </createIndex>
+    <createIndex indexName="idx_leaves_dates" tableName="leaves">
+      <column name="start_date"/>
+      <column name="end_date"/>
+    </createIndex>
+  </changeSet>
+
+  <!-- Create permissions table -->
+  <changeSet id="009-create-permissions" author="system">
+    <createTable tableName="permissions">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="TEXT"/>
+      <column name="resource" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="action" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint
+      baseTableName="permissions"
+      baseColumnNames="tenant_id"
+      constraintName="fk_permissions_tenant"
+      referencedTableName="tenants"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <createIndex indexName="idx_permissions_tenant" tableName="permissions">
+      <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="idx_permissions_resource_action" tableName="permissions">
+      <column name="resource"/>
+      <column name="action"/>
+    </createIndex>
+  </changeSet>
+
+  <!-- Create role_permissions table -->
+  <changeSet id="010-create-role-permissions" author="system">
+    <createTable tableName="role_permissions">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="role_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="permission_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint
+      baseTableName="role_permissions"
+      baseColumnNames="role_id"
+      constraintName="fk_role_permissions_role"
+      referencedTableName="roles"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <addForeignKeyConstraint
+      baseTableName="role_permissions"
+      baseColumnNames="permission_id"
+      constraintName="fk_role_permissions_permission"
+      referencedTableName="permissions"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <createIndex indexName="idx_role_permissions_role" tableName="role_permissions">
+      <column name="role_id"/>
+    </createIndex>
+    <createIndex indexName="idx_role_permissions_unique" tableName="role_permissions" unique="true">
+      <column name="role_id"/>
+      <column name="permission_id"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>
+

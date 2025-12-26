@@ -1,0 +1,165 @@
+.leave-approvals-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.leave-approvals-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.leave-approvals-header h1 {
+  margin: 0;
+  color: #333;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-tabs button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+}
+
+.filter-tabs button:hover {
+  background: #f8f9fa;
+}
+
+.filter-tabs button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.approve-btn {
+  padding: 0.5rem 1rem;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+.approve-btn:hover:not(:disabled) {
+  background: #218838;
+}
+
+.approve-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.reject-btn {
+  padding: 0.5rem 1rem;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s;
+}
+
+.reject-btn:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.reject-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.modal-actions .cancel-btn {
+  background: #6c757d;
+  color: white;
+}
+
+.modal-actions .cancel-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.leaves-table-container,
+.leaves-table,
+.status-badge,
+.reason-cell,
+.cancel-btn,
+.rejection-reason,
+.empty-state,
+.error-message {
+  /* Reuse styles from MyLeaves.css */
+}
+
+@media (max-width: 768px) {
+  .leave-approvals-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-tabs {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+

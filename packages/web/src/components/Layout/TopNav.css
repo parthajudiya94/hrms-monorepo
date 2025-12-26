@@ -1,0 +1,89 @@
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 64px;
+  line-height: 64px;
+}
+
+.top-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menu-trigger {
+  font-size: 18px;
+  color: #595959;
+}
+
+.menu-trigger:hover {
+  color: #805ad5;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #805ad5 0%, #b794f4 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.top-nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.5;
+}
+
+.user-info .ant-typography {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.user-role {
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+@media (max-width: 768px) {
+  .top-nav {
+    padding: 0 16px;
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .user-info {
+    display: none;
+  }
+}

@@ -6,6 +6,14 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
- 
+  <!-- Include changesets organized by module -->
+  <!-- Paths are relative to the working directory (bin/native) -->
+  <include file="../../changesets/001-tenants.xml"/>
+  <include file="../../changesets/002-roles.xml"/>
+  <include file="../../changesets/003-users.xml"/>
+  <include file="../../changesets/004-time-tracking.xml"/>
+  <include file="../../changesets/005-seed-data.xml"/>
+  <include file="../../changesets/006-leave-management.xml"/>
+  <include file="../../changesets/007-seed-leave-types.xml"/>
 
 </databaseChangeLog>

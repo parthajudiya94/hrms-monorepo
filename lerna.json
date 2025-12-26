@@ -2,5 +2,13 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "npmClient": "npm",
+  "command": {
+    "bootstrap": {
+      "ignore": "**/liquibase",
+      "ignoreScripts": false,
+      "npmClientArgs": ["--ignore-scripts"]
+    }
+  }
 }

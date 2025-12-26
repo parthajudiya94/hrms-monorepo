@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <!-- Create users table -->
+  <changeSet id="003-create-users" author="system">
+    <createTable tableName="users">
+      <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="tenant_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="role_id" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="email" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="password_hash" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="first_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint
+      baseTableName="users"
+      baseColumnNames="tenant_id"
+      constraintName="fk_users_tenant"
+      referencedTableName="tenants"
+      referencedColumnNames="id"
+      onDelete="CASCADE"/>
+    <addForeignKeyConstraint
+      baseTableName="users"
+      baseColumnNames="role_id"
+      constraintName="fk_users_role"
+      referencedTableName="roles"
+      referencedColumnNames="id"
+      onDelete="RESTRICT"/>
+    <createIndex indexName="idx_users_tenant" tableName="users">
+      <column name="tenant_id"/>
+    </createIndex>
+    <createIndex indexName="idx_users_email" tableName="users">
+      <column name="email"/>
+    </createIndex>
+    <createIndex indexName="idx_users_tenant_email" tableName="users">
+      <column name="tenant_id"/>
+      <column name="email"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>
+

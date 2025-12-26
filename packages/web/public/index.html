@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Multi-tenant HRMS Application" />
+    <!-- Prevent iframe embedding for security and click issues -->
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'none';" />
+    <title>HRMS - Time Tracking</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      // Break out of iframe if embedded
+      if (window.self !== window.top) {
+        // If we're in an iframe, try to break out
+        try {
+          window.top.location = window.self.location;
+        } catch (e) {
+          // If we can't break out (due to X-Frame-Options), show a message
+          document.body.innerHTML = '<div style="padding: 20px; text-align: center; font-family: Arial, sans-serif;"><h1>This application cannot be embedded in an iframe</h1><p>Please open this application in a new window or tab.</p><p><a href="' + window.location.href + '" target="_blank">Open in new window</a></p></div>';
+        }
+      }
+    </script>
+  </body>
+</html>
+

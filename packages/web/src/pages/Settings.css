@@ -1,0 +1,28 @@
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settings-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.settings-card h1 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 0.5rem;
+}
+
+.settings-section {
+  margin-top: 2rem;
+}
+
+.settings-section h2 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
